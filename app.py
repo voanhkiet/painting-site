@@ -43,7 +43,8 @@ def submit_inquiry():
         name=data["name"],
         phone=data["phone"],
         message=data["message"],
-        painting=data["painting"]
+        painting=data["painting"],
+        email=data["email"] 
     )
     
     db.session.add(new_inquiry)
@@ -54,6 +55,7 @@ def submit_inquiry():
         data["name"],
         data["phone"],
         data["message"],
+        data["email"],
         data["painting"]
     )
 
@@ -172,7 +174,7 @@ def logout():
     return redirect(url_for("login"))
 
 
-def send_email(name, phone, message, painting):
+def send_email(name, phone, message, painting, email):
     sender = os.environ.get("EMAIL_USER")
     password = os.environ.get("EMAIL_PASS")
     receiver = sender  # send to yourself
@@ -185,7 +187,7 @@ New customer inquiry:
 Name: {name}
 Phone: {phone}
 Painting: {painting}
-
+email: {email}
 Message:
 {message}
 """

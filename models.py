@@ -22,8 +22,10 @@ class Inquiry(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
     phone = db.Column(db.String(50))
+    email = db.Column(db.String(120))
     message = db.Column(db.Text)
     painting = db.Column(db.String(200))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
 
     is_contacted = db.Column(db.Boolean, default=False) # NEW
