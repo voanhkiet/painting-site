@@ -10,7 +10,7 @@ UPLOAD_FOLDER = "static/images"
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
-app.secret_key = "kiet-very-strong-secret-2026"
+app.secret_key = os.environ.get("SECRET_KEY", "fallback-key")
 ADMIN_USERNAME = "admin"
 ADMIN_PASSWORD = "123456"
 db.init_app(app)
