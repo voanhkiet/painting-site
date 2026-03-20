@@ -12,7 +12,9 @@
 
 <div class="card {% if painting.is_sold %}sold{% endif %}">
 <img 
-    src="{{ painting.image }}"
+    src="{{ painting.image.replace('/upload/', '/upload/w_800,h_800,c_fill,f_auto,q_auto/')}}"
+    style="width:100%; height:auto;"
+    loading="lazy"
     data-index="{{ loop.index0 }}"
     data-title="{% if lang == 'vi' %}{{ painting.title_vi }}{% else %}{{ painting.title_en }}{% endif %}"
     data-desc="{% if lang == 'vi' %}{{ painting.description_vi }}{% else %}{{ painting.description_en }}{% endif %}"
@@ -126,7 +128,7 @@ document.addEventListener("DOMContentLoaded", function() {
     desc.innerText = el.dataset.desc || "";
 
     const text = encodeURIComponent("I'm interested in: " + el.dataset.title);
-    zaloBtn.href = `https://zalo.me/84900000000?text=${text}`;
+    zaloBtn.href = `https://zalo.me/84939742254?text=${text}`;
 
     modal.classList.add("show");
 };
