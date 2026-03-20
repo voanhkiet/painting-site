@@ -6,6 +6,9 @@ from datetime import datetime
 from functools import wraps
 import smtplib
 from email.mime.text import MIMEText
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 app = Flask(__name__)
 
@@ -17,6 +20,11 @@ if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
 
 app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL or "sqlite:///database.db"
 
+cloudinary.config(
+    cloud_name=os.environ.get("CLOUD_NAME"),
+    api_key=os.environ.get("CLOUD_API_KEY"),
+    api_secret=os.environ.get("CLOUD_API_SECRET")
+)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 app.secret_key = os.environ.get("SECRET_KEY", "fallback-key")
@@ -51,13 +59,25 @@ def submit_inquiry():
     db.session.commit()
 
      # 🔥 SEND EMAIL HERE
-    send_email(
-        data["name"],
-        data["phone"],
-        data["message"],
-        data["email"],
-        data["painting"]
-    )
+
+    try:
+        send_email(
+            data["name"],
+            data["phone"],
+            data["message"],
+            data["painting"],
+            data["email"]
+        )
+
+        send_auto_reply(
+            data["email"],
+            data["name"],
+            data["painting"]
+        )
+
+    except Exception as e:
+        print("Email error:", e)
+     
 
     return jsonify({"status": "success"})
 
@@ -104,16 +124,15 @@ def admin():
         file = request.files["image"]
 
         if file:
-            filename = secure_filename(file.filename)
-            filepath = os.path.join(app.config["UPLOAD_FOLDER"], filename)
-            file.save(filepath)
+            upload_result = cloudinary.uploader.upload(file)
+            image_url = upload_result["secure_url"]
             is_sold = "is_sold" in request.form
             painting = Painting(
                 title_en=title_en,
                 title_vi=title_vi,
                 description_en=description_en,
                 description_vi=description_vi,
-                image=filename,
+                image=image_url,
                 is_sold=is_sold
             )
 
@@ -203,7 +222,32 @@ Message:
         server.send_message(msg)
 
     
+def send_auto_reply(to_email, name, painting):
+    sender = os.environ.get("EMAIL_USER")
+    password = os.environ.get("EMAIL_PASS")
 
+    subject = "🎨 Thank you for your inquiry"
+
+    body = f"""
+Hi {name},
+
+Thank you for your interest in "{painting}".
+
+We received your inquiry and will contact you soon.
+
+Best regards,
+Art Gallery
+"""
+
+    msg = MIMEText(body)
+    msg["Subject"] = subject
+    msg["From"] = sender
+    msg["To"] = to_email
+
+    with smtplib.SMTP("smtp.gmail.com", 587) as server:
+        server.starttls()
+        server.login(sender, password)
+        server.send_message(msg)
 # Create DB automatically
 if __name__ == "__main__":
     with app.app_context():

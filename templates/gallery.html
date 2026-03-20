@@ -12,7 +12,7 @@
 
 <div class="card {% if painting.is_sold %}sold{% endif %}">
 <img 
-    src="{{ url_for('static', filename='images/' + painting.image) }}"
+    src="{{ painting.image }}"
     data-index="{{ loop.index0 }}"
     data-title="{% if lang == 'vi' %}{{ painting.title_vi }}{% else %}{{ painting.title_en }}{% endif %}"
     data-desc="{% if lang == 'vi' %}{{ painting.description_vi }}{% else %}{{ painting.description_en }}{% endif %}"
@@ -45,10 +45,10 @@
         </div>
     {% else %}
         <div class="actions">
-            <a href="tel:+84900000000" class="btn-action">
+            <a href="tel:+84939742254" class="btn-action">
                 {% if lang == "vi" %}Gọi{% else %}Call{% endif %}
             </a>
-            <a href="https://zalo.me/84900000000" class="btn-action">Zalo</a>
+            <a href="https://zalo.me/84939742254" class="btn-action">Zalo</a>
         </div>
     {% endif %}
 
