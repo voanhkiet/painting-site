@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Customer Inquiries</h2>
+
+<table class="admin-table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Painting</th>
+            <th>Message</th>
+            <th>Time</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for i in inquiries %}
+        <tr>
+            <td>{{ i.name }}</td>
+            <td>{{ i.phone }}</td>
+            <td>{{ i.painting }}</td>
+            <td>{{ i.message }}</td>
+            <td>{{ i.created_at.strftime("%Y-%m-%d %H:%M") }}</td>
+            <td>
+              {% if i.is_contacted %}
+                <span class="status contacted">Contacted</span>
+              {% else %}
+                <span class="status new">New</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if not i.is_contacted %}
+                  <button class="contact-btn" data-id="{{ i.id }}">
+                      Mark Contacted
+                  </button>
+              {% else %}
+                  <span class="done">✔ Contacted</span>
+              {% endif %}
+
+              <button class="delete-btn" data-id="{{ i.id }}">
+                  Delete
+              </button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<h3>Total inquiries: {{ inquiries|length }}</h3>
+<script>
+document.addEventListener("click", function(e) {
+    if (e.target.classList.contains("delete-btn")) {
+        const id = e.target.dataset.id;
+
+        if (!confirm("Delete this inquiry?")) return;
+
+        fetch(`/admin/inquiry/${id}/delete`, {
+            method: "POST"
+        }).then(() => location.reload());
+    }
+});
+document.addEventListener("click", function(e) {
+
+    if (e.target.classList.contains("contact-btn")) {
+        const btn = e.target;
+        const id = btn.dataset.id;
+
+        // disable immediately
+        btn.innerText = "✔ Contacted";
+        btn.disabled = true;
+
+        fetch(`/admin/inquiry/${id}/contacted`, {
+            method: "POST"
+        });
+    }
+
+});
+</script>
+{% endblock %}

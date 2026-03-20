@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Art Gallery</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<header class="header">
+    <div class="logo">My Gallery</div>
+
+    <nav>
+        <a href="/?lang={{ lang }}">Home</a>
+        <a href="/gallery?lang={{ lang }}">Gallery</a>
+        <a href="/contact?lang={{ lang }}">Contact</a>
+    </nav>
+
+    <div class="lang">
+        <a href="?lang=en">EN</a> |
+        <a href="?lang=vi">VI</a>
+    </div>
+</header>
+
+{% block content %}{% endblock %}
+
+</body>
+</html>

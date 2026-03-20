@@ -1,0 +1,255 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if lang == "vi" %}
+<h2>Bộ Sưu Tập</h2>
+{% else %}
+<h2>Collection</h2>
+{% endif %}
+<div class="gallery">
+{% for painting in paintings %}
+
+<div class="card {% if painting.is_sold %}sold{% endif %}">
+<img 
+    src="{{ url_for('static', filename='images/' + painting.image) }}"
+    data-index="{{ loop.index0 }}"
+    data-title="{% if lang == 'vi' %}{{ painting.title_vi }}{% else %}{{ painting.title_en }}{% endif %}"
+    data-desc="{% if lang == 'vi' %}{{ painting.description_vi }}{% else %}{{ painting.description_en }}{% endif %}"
+    onclick="openModal(this)"
+>
+
+    <div class="overlay">
+
+    <!-- TITLE -->
+    <h3>
+        {% if lang == "vi" %}
+            {{ painting.title_vi }}
+        {% else %}
+            {{ painting.title_en }}
+        {% endif %}
+    </h3>
+
+    <!-- DESCRIPTION -->
+    <p>
+        {% if lang == "vi" %}
+            {{ painting.description_vi }}
+        {% else %}
+            {{ painting.description_en }}
+        {% endif %}
+    </p>
+
+    {% if painting.is_sold %}
+        <div class="sold-badge">
+            {% if lang == "vi" %}Đã bán{% else %}SOLD{% endif %}
+        </div>
+    {% else %}
+        <div class="actions">
+            <a href="tel:+84900000000" class="btn-action">
+                {% if lang == "vi" %}Gọi{% else %}Call{% endif %}
+            </a>
+            <a href="https://zalo.me/84900000000" class="btn-action">Zalo</a>
+        </div>
+    {% endif %}
+
+</div>
+
+</div>
+
+{% endfor %}
+</div>
+
+<!-- ✅ ADD MODAL HERE -->
+<div id="imageModal" class="modal">
+    <span class="close">&times;</span>
+
+    <div class="nav left" onclick="prevImage()">❮</div>
+    <div class="nav right" onclick="nextImage()">❯</div>
+
+    <div class="modal-box">
+        <img class="modal-content" id="modalImg">
+
+        <!-- ✅ ADD INFO -->
+        <div class="modal-info">
+            <h3 id="modalTitle"></h3>
+            <p id="modalDesc"></p>
+
+            <!-- 🔥 CONTACT -->
+           <div class="modal-actions">
+                <a id="callBtn" href="tel:+84939742254">📞 Call</a>
+                <a id="zaloBtn" href="#">💬 Zalo</a>
+                <a id="inquiryBtn">📩 Ask</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="inquiryModal" class="modal">
+    <div class="form-box">
+        <span class="close" onclick="closeInquiry()">&times;</span>
+
+        <h3>Request this artwork</h3>
+
+        <form id="inquiryForm">
+            <input type="text" name="name" placeholder="Your name" required>
+            <input type="text" name="phone" placeholder="Phone number" required>
+            <textarea name="message" placeholder="Message"></textarea>
+
+            <input type="hidden" name="painting">
+
+            <button type="submit">Send</button>
+        </form>
+    </div>
+</div>
+
+<!-- ✅ SCRIPT AFTER MODAL -->
+<script>
+let currentIndex = 0;
+
+document.addEventListener("DOMContentLoaded", function() {
+
+    const modal = document.getElementById("imageModal");
+
+    // ✅ OPEN MODAL
+  window.openModal = function(el) {
+    const modalImg = document.getElementById("modalImg");
+
+    const title = document.getElementById("modalTitle");
+    const desc = document.getElementById("modalDesc");
+    const zaloBtn = document.getElementById("zaloBtn");
+
+    currentIndex = parseInt(el.dataset.index);
+
+    modalImg.src = el.src;
+    title.innerText = el.dataset.title || "";
+    desc.innerText = el.dataset.desc || "";
+
+    const text = encodeURIComponent("I'm interested in: " + el.dataset.title);
+    zaloBtn.href = `https://zalo.me/84900000000?text=${text}`;
+
+    modal.classList.add("show");
+};
+    // ✅ NEXT
+    window.nextImage = function() {
+        const allImgs = document.querySelectorAll(".card img");
+
+        currentIndex = (currentIndex + 1) % allImgs.length;
+        updateModal(allImgs[currentIndex]);
+    };
+
+    // ✅ PREVIOUS
+    window.prevImage = function() {
+        const allImgs = document.querySelectorAll(".card img");
+
+        currentIndex = (currentIndex - 1 + allImgs.length) % allImgs.length;
+        updateModal(allImgs[currentIndex]);
+    };
+
+    // ✅ CLOSE BUTTON
+document.querySelectorAll(".close").forEach(btn => {
+    btn.onclick = function() {
+        document.querySelectorAll(".modal").forEach(m => m.classList.remove("show"));
+    };
+});
+
+    // ✅ CLICK OUTSIDE
+    modal.onclick = function(e) {
+        if (e.target.id === "imageModal") {
+            modal.classList.remove("show");
+        }
+    };
+
+});
+
+// ✅ KEYBOARD
+document.addEventListener("keydown", function(e) {
+    const modal = document.getElementById("imageModal");
+
+    if (modal.classList.contains("show")) {
+        if (e.key === "Escape") modal.classList.remove("show");
+        if (e.key === "ArrowRight") nextImage();
+        if (e.key === "ArrowLeft") prevImage();
+    }
+});
+
+// ✅ UPDATE MODAL
+function updateModal(el) {
+    const modalImg = document.getElementById("modalImg");
+    const title = document.getElementById("modalTitle");
+const desc = document.getElementById("modalDesc");
+const zaloBtn = document.getElementById("zaloBtn");
+
+title.innerText = el.dataset.title || "";
+desc.innerText = el.dataset.desc || "";
+
+const text = encodeURIComponent("I'm interested in: " + el.dataset.title);
+zaloBtn.href = `https://zalo.me/84939742254?text=${text}`;
+    modalImg.style.opacity = 0;
+
+    setTimeout(() => {
+        modalImg.src = el.src;
+        modalImg.style.opacity = 1;
+    }, 150);
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+
+    // 🔥 INQUIRY BUTTON CLICK
+    document.addEventListener("click", function(e) {
+        if (e.target.id === "inquiryBtn") {
+            const title = document.getElementById("modalTitle").innerText;
+
+            const modal = document.getElementById("inquiryModal");
+            modal.classList.add("show");
+
+            document.querySelector('input[name="painting"]').value = title;
+        }
+    });
+
+    // 🔥 FORM SUBMIT
+    document.getElementById("inquiryForm").addEventListener("submit", async function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+
+        const data = {
+            name: formData.get("name"),
+            phone: formData.get("phone"),
+            message: formData.get("message"),
+            painting: formData.get("painting")
+        };
+
+        await fetch("/inquiry", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+
+        // ❌ remove alert
+        // alert("Sent successfully!");
+
+        const msg = document.createElement("div");
+        msg.innerText = "✔ Sent successfully!";
+        msg.style.color = "#4CAF50";
+        msg.style.marginTop = "10px";
+
+        this.appendChild(msg);
+
+        setTimeout(() => {
+            msg.remove();
+            document.getElementById("inquiryModal").classList.remove("show");
+        }, 1500);
+    });
+
+});
+
+function closeInquiry() {
+    document.getElementById("inquiryModal").classList.remove("show");
+}
+
+
+</script>
+
+{% endblock %}

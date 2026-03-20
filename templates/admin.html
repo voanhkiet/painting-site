@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Upload Painting</h2>
+
+<form method="POST" enctype="multipart/form-data" class="admin-form">
+
+    <input type="text" name="title_en" placeholder="Title (English)" required>
+    <input type="text" name="title_vi" placeholder="Tiêu đề (Tiếng Việt)" required>
+
+    <textarea name="description_en" placeholder="Description (English)"></textarea>
+    <textarea name="description_vi" placeholder="Mô tả (Tiếng Việt)"></textarea>
+
+    <input type="file" name="image" required>
+
+    <!-- ✅ ADD HERE -->
+    <label class="sold-check">
+        <input type="checkbox" name="is_sold">
+        Mark as SOLD
+    </label>
+    
+    <button type="submit">Upload</button>
+
+</form>
+
+{% endblock %}

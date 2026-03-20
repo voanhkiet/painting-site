@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="hero">
+    <div class="hero-text">
+        {% if lang == "vi" %}
+            <h1>Tranh Nghệ Thuật Độc Bản</h1>
+            <p>Mỗi bức tranh là một câu chuyện riêng</p>
+            <a href="/gallery?lang=vi" class="btn">Xem & Liên hệ mua</a>
+        {% else %}
+            <h1>Original Unique Paintings</h1>
+            <p>Each artwork tells a story</p>
+            <a href="/gallery?lang=en" class="btn">View & Inquire</a>
+        {% endif %}
+        <p class="artist-sign">by Võ Thị Hoàng Anh</p>
+    </div>
+</section>
+
+{% endblock %}
