@@ -4,6 +4,9 @@ from werkzeug.utils import secure_filename
 import os
 from datetime import datetime
 from functools import wraps
+import smtplib
+from email.mime.text import MIMEText
+
 app = Flask(__name__)
 
 UPLOAD_FOLDER = "static/images"
@@ -30,6 +33,8 @@ def admin_required(f):
         return f(*args, **kwargs)
     return wrapper
 
+
+
 @app.route("/inquiry", methods=["POST"])
 def submit_inquiry():
     data = request.json
@@ -43,6 +48,14 @@ def submit_inquiry():
     
     db.session.add(new_inquiry)
     db.session.commit()
+
+     # 🔥 SEND EMAIL HERE
+    send_email(
+        data["name"],
+        data["phone"],
+        data["message"],
+        data["painting"]
+    )
 
     return jsonify({"status": "success"})
 
@@ -158,6 +171,34 @@ def logout():
     session.pop("admin", None)
     return redirect(url_for("login"))
 
+
+def send_email(name, phone, message, painting):
+    sender = os.environ.get("EMAIL_USER")
+    password = os.environ.get("EMAIL_PASS")
+    receiver = sender  # send to yourself
+
+    subject = f"🎨 New Inquiry: {painting}"
+    
+    body = f"""
+New customer inquiry:
+
+Name: {name}
+Phone: {phone}
+Painting: {painting}
+
+Message:
+{message}
+"""
+
+    msg = MIMEText(body)
+    msg["Subject"] = subject
+    msg["From"] = sender
+    msg["To"] = receiver
+
+    with smtplib.SMTP("smtp.gmail.com", 587) as server:
+        server.starttls()
+        server.login(sender, password)
+        server.send_message(msg)
 
     
 
