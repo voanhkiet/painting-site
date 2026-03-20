@@ -209,4 +209,5 @@ __marimo__/
 venv/
 __pycache__/
 *.pyc
+instance/
 database.db
