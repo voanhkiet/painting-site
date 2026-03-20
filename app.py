@@ -7,7 +7,13 @@ from functools import wraps
 app = Flask(__name__)
 
 UPLOAD_FOLDER = "static/images"
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
+DATABASE_URL = os.environ.get("DATABASE_URL")
+
+if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
+app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL or "sqlite:///database.db"
+
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 app.secret_key = os.environ.get("SECRET_KEY", "fallback-key")
