@@ -127,7 +127,16 @@ document.addEventListener("DOMContentLoaded", function() {
     title.innerText = el.dataset.title || "";
     desc.innerText = el.dataset.desc || "";
 
-    const text = encodeURIComponent("I'm interested in: " + el.dataset.title);
+    const text = encodeURIComponent(
+    `Xin chào,
+
+    Tôi quan tâm đến tranh:
+
+    🎨 ${el.dataset.title}
+
+    Bạn có thể tư vấn thêm giúp tôi không?`
+    );
+
     zaloBtn.href = `https://zalo.me/84939742254?text=${text}`;
 
     modal.classList.add("show");
@@ -185,7 +194,16 @@ const zaloBtn = document.getElementById("zaloBtn");
 title.innerText = el.dataset.title || "";
 desc.innerText = el.dataset.desc || "";
 
-const text = encodeURIComponent("I'm interested in: " + el.dataset.title);
+const text = encodeURIComponent(
+`Xin chào,
+
+Tôi quan tâm đến tranh:
+
+🎨 ${el.dataset.title}
+
+Bạn có thể tư vấn thêm giúp tôi không?`
+);
+
 zaloBtn.href = `https://zalo.me/84939742254?text=${text}`;
     modalImg.style.opacity = 0;
 
@@ -218,8 +236,10 @@ document.addEventListener("DOMContentLoaded", function() {
         const data = {
             name: formData.get("name"),
             phone: formData.get("phone"),
+            email: formData.get("email"),
             message: formData.get("message"),
             painting: formData.get("painting")
+            
         };
 
         await fetch("/inquiry", {
