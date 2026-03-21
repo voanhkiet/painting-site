@@ -48,19 +48,18 @@ def admin_required(f):
 @app.route("/inquiry", methods=["POST"])
 def submit_inquiry():
     data = request.json
+    email = data.get("email")
 
     new_inquiry = Inquiry(
         name=data["name"],
         phone=data["phone"],
         message=data["message"],
         painting=data["painting"],
-        email=data["email"] 
+        email=email
     )
     
     db.session.add(new_inquiry)
     db.session.commit()
-
-     # 🔥 SEND EMAIL HERE
 
     try:
         send_email(
@@ -68,18 +67,18 @@ def submit_inquiry():
             data["phone"],
             data["message"],
             data["painting"],
-            data["email"]
+            email  # ✅ safe
         )
 
-        send_auto_reply(
-            data["email"],
-            data["name"],
-            data["painting"]
-        )
+        if email:  # ✅ only send if exists
+            send_auto_reply(
+                email,
+                data["name"],
+                data["painting"]
+            )
 
     except Exception as e:
         print("Email error:", e)
-     
 
     return jsonify({"status": "success"})
 
