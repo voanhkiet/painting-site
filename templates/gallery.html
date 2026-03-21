@@ -194,6 +194,7 @@ document.querySelectorAll(".close").forEach(btn => {
 
 function handleSwipe() {
     const modal = document.getElementById("imageModal");
+    const modalImg = document.getElementById("modalImg");
 
     if (!modal.classList.contains("show")) return;
 
@@ -201,17 +202,18 @@ function handleSwipe() {
 
     if (Math.abs(diff) < 50) return;
 
-    // 🔥 swipe feedback (ADD HERE)
-    img.style.transform = "scale(0.95)";
+    // 🔥 feedback animation
+    modalImg.style.transform = "scale(0.95)";
+    modalImg.style.transition = "transform 0.15s ease";
 
     setTimeout(() => {
-        img.style.transform = "scale(1)";
+        modalImg.style.transform = "scale(1)";
     }, 150);
 
     if (diff > 0) {
-        nextImage();   // swipe left
+        nextImage();
     } else {
-        prevImage();   // swipe right
+        prevImage();
     }
 }
 
