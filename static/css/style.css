@@ -37,7 +37,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    animation: zomomBg 20s ease infinite alternate;
+    animation: zoomBg 20s ease infinite alternate;
 }
 /* ADD THIS */
 .hero::before {
@@ -47,6 +47,23 @@ body {
     background: rgba(0, 0, 0, 0.5);
 }
 
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.hero button {
+    background: white;
+    color: black;
+    padding: 12px 28px;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.hero button:hover {
+    background: #ddd;
+}
 /* Make text above overlay */
 .hero-text {
     position: relative;
@@ -54,11 +71,11 @@ body {
     text-align: center;
     transform: translateY(-20px);
     animation: fadeUp 1s ease forwards;
-    backdrop-filter: blur(2px);
+    backdrop-filter: none;
 }
 .hero h1 {
     font-size: 56px;
-    font-weight: 600;
+    font-weight: 800;
     letter-spacing: 1px;
     text-shadow: 0 4px 20px rgba(0,0,0,0.6);
     line-height: 1.2;
@@ -104,6 +121,7 @@ body {
     width: 100%;
     display: block;
     transition: transform 0.4s ease, filter 0.3s ease;
+    filter: contrast(1.05) saturate(1.05);
 }
 .card.sold img {
     filter: grayscale(80%) brightness(0.6) contrast(0.9);
@@ -154,10 +172,11 @@ nav a {
     width: 100%;
     padding: 20px;
 
-    background: linear-gradient(
+     background: linear-gradient(
         to top,
-        rgba(0,0,0,0.85),
-        rgba(0,0,0,0.4),
+        rgba(0,0,0,0.95),
+        rgba(0,0,0,0.6),
+        rgba(0,0,0,0.2),
         transparent
     );
 
@@ -215,6 +234,7 @@ nav a {
 
     box-shadow:
         0 20px 60px rgba(0,0,0,0.8),
+        0 0 40px rgba(255,255,255,0.06),
         0 0 0 1px rgba(255,255,255,0.05);
     animation: zoomIn 0.3s ease;
     position: relative;
@@ -552,4 +572,38 @@ nav a {
     color: #28a745;
     font-weight: 600;
     font-size: 13px;
+}
+
+.zalo-button {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: #0068ff;
+    color: white;
+    padding: 14px 18px;
+    border-radius: 999px;
+    font-weight: 600;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    transition: 0.3s;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(0,104,255,0.5); }
+    70% { box-shadow: 0 0 0 12px rgba(0,104,255,0); }
+    100% { box-shadow: 0 0 0 0 rgba(0,104,255,0); }
+}
+
+.zalo-button:hover {
+    transform: scale(1.05);
+}
+
+.btn,
+.btn-action {
+    transition: all 0.25s ease;
+}
+
+.btn:active,
+.btn-action:active {
+    transform: scale(0.96);
 }
