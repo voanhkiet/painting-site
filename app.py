@@ -9,8 +9,10 @@ from email.mime.text import MIMEText
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
+from flask_migrate import Migrate
 
 app = Flask(__name__)
+
 
 UPLOAD_FOLDER = "static/images"
 DATABASE_URL = os.environ.get("DATABASE_URL")
@@ -31,7 +33,7 @@ app.secret_key = os.environ.get("SECRET_KEY", "fallback-key")
 ADMIN_USERNAME = "admin"
 ADMIN_PASSWORD = "123456"
 db.init_app(app)
-
+migrate = Migrate(app, db)
 
 def admin_required(f):
     @wraps(f)
@@ -248,6 +250,8 @@ Art Gallery
         server.starttls()
         server.login(sender, password)
         server.send_message(msg)
+
+
 # Create DB automatically
 if __name__ == "__main__":
     with app.app_context():
