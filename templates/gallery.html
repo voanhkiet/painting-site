@@ -110,21 +110,29 @@
 let currentIndex = 0;
 let startX = 0;
 let endX = 0;
-
+let isZooming = false;
 
 document.addEventListener("DOMContentLoaded", function() {
 
     const modal = document.getElementById("imageModal");
      // 👇 ADD SWIPE HERE
    
-    modal.addEventListener("touchstart", function(e) {
-        startX = e.touches[0].clientX;
-    });
+  modal.addEventListener("touchstart", function(e) {
+    if (e.touches.length > 1) {
+        isZooming = true;  // 👈 pinch detected
+        return;
+    }
 
-    modal.addEventListener("touchend", function(e) {
-        endX = e.changedTouches[0].clientX;
-        handleSwipe();
-    });
+    isZooming = false;
+    startX = e.touches[0].clientX;
+});
+
+  modal.addEventListener("touchend", function(e) {
+    if (isZooming) return; // ❌ ignore swipe when zooming
+
+    endX = e.changedTouches[0].clientX;
+    handleSwipe();
+});
 
   modal.addEventListener("touchmove", function(e) {
     if (modal.classList.contains("show")) {

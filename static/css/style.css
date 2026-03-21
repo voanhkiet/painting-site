@@ -244,6 +244,7 @@ nav a {
     transform: scale(0.9);
     opacity: 0;
     transition: transform 0.3s ease, opacity 0.25s ease;
+    touch-action: manipulation;
 }
 .modal.show .modal-content {
     transform: scale(1);
@@ -401,6 +402,7 @@ nav a {
         0 20px 60px rgba(0,0,0,0.8),
         0 0 40px rgba(255,255,255,0.05);
     }
+
 }
 
 .nav {
