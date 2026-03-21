@@ -198,7 +198,7 @@ def send_email(name, phone, message, painting, email):
     sender = os.environ.get("EMAIL_USER")
     password = os.environ.get("EMAIL_PASS")
     receiver = sender  # send to yourself
-
+    
     subject = f"🎨 New Inquiry: {painting}"
     
     body = f"""
