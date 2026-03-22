@@ -189,6 +189,7 @@ nav a {
     text-align: center;
 
     transition: 0.3s ease;
+    pointer-events: none;
 }
 .overlay h3 {
     font-size: 18px;

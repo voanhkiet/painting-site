@@ -10,16 +10,17 @@
 <div class="gallery">
 {% for painting in paintings %}
 
-<div class="card {% if painting.is_sold %}sold{% endif %}">
-<img 
-    src="{{ painting.image.replace('/upload/', '/upload/w_800,h_800,c_fit,f_auto,q_auto/')}}"
-    style="width:100%; height:auto;"
-    loading="lazy"
-    data-index="{{ loop.index0 }}"
-    data-title="{% if lang == 'vi' %}{{ painting.title_vi }}{% else %}{{ painting.title_en }}{% endif %}"
-    data-desc="{% if lang == 'vi' %}{{ painting.description_vi }}{% else %}{{ painting.description_en }}{% endif %}"
-    onclick="openModal(this)"
->
+<div class="card {% if painting.is_sold %}sold{% endif %}" 
+     onclick="openModal(this.querySelector('img'))">
+
+    <img 
+        src="{{ painting.image.replace('/upload/', '/upload/w_800,h_800,c_fit,f_auto,q_auto/')}}"
+        style="width:100%; height:auto;"
+        loading="lazy"
+        data-index="{{ loop.index0 }}"
+        data-title="{% if lang == 'vi' %}{{ painting.title_vi }}{% else %}{{ painting.title_en }}{% endif %}"
+        data-desc="{% if lang == 'vi' %}{{ painting.description_vi }}{% else %}{{ painting.description_en }}{% endif %}"
+    >
 
     <div class="overlay">
 
