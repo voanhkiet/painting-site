@@ -34,5 +34,22 @@
     Chat Zalo
 </a>
 
+<div id="inquiryModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeInquiry()">&times;</span>
+
+    <h2 id="modalTitle">Inquiry</h2>
+
+    <input type="text" id="name" placeholder="Your name">
+    <input type="text" id="phone" placeholder="Phone">
+    <input type="email" id="email" placeholder="Email">
+    
+    <textarea id="message" placeholder="Message"></textarea>
+
+    <input type="hidden" id="painting">
+
+    <button onclick="submitInquiry()">Send</button>
+  </div>
+</div>
 </body>
 </html>
