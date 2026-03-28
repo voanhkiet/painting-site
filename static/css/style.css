@@ -107,20 +107,24 @@ body {
 
     max-width: 1400px;
     margin: 0 auto;
+
+    column-fill: balance;
 }
 
 .card {
    break-inside: avoid;
    margin-bottom: 20px;
+   display: inline-block;
+   width: 100%;
    position: relative;
 
-   border-radius: 12px;
+   border-radius: 10px;
    overflow: hidden;
 
    background: #fff;
 
-   box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-   transition: all 0.3s ease;
+   box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+   transition: all 0.25s ease;
 }
 
 .card img {
@@ -157,8 +161,8 @@ body {
 
 
 .card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    transform: translateY(-4px);
+    box-shadow: 0 14px 40px rgba(0,0,0,0.15);
 }
 
 .card:hover img {
