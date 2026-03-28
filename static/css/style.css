@@ -101,9 +101,11 @@ body {
 }
 /* GALLERY */
 .gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 20px;
+
+    column-count: 4;
+    column-gap: 20px;
+
     align-items: start;
     max-width: 1400px;
     margin: 0 auto;
@@ -118,7 +120,10 @@ body {
    position: relative;
    border-radius: 14px;
 
-   border-radius: 10px;
+   break-inside: avoid;
+   margin-bottom: 20px;
+
+
    overflow: hidden;
 
    background: #fff;
