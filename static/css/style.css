@@ -103,13 +103,13 @@ body {
 .gallery {
     gap: 20px;
 
-    column-count: 4;
-    column-gap: 20px;
+    column-count: 2;
+    column-gap: 16px;
 
     align-items: start;
     max-width: 1400px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 12px;
 }
 
 /* Tablet */
@@ -149,19 +149,23 @@ body {
    background: #fff;
 
    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-   transition: all 0.25s ease;
+   transition: transform 0.2s ease;
 }
 
 .card img {
    width: 100%;
    height: auto;
    display: block;
-    max-height: 60vh;
+    max-height: 70vh;
     border-radius: 10px;
-    object-fit: contain;
+    object-fit: cover;
 
    transition: transform 0.4s ease;
 
+}
+
+.card:active {
+    transform: scale(0.97);
 }
 
 .card.sold img {
