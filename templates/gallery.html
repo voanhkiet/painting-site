@@ -371,10 +371,9 @@ function closeInquiry() {
 
 function balanceMasonry() {
     const gallery = document.querySelector('.gallery');
-const cards = Array.from(gallery.children);
-
+const cards = Array.from(document.querySelectorAll('.card'));
 // create columns
-const columnCount = window.innerWidth < 768 ? 2 : 4;
+const columnCount = getColumnCount();
 const columns = [];
 
 gallery.innerHTML = '';
@@ -407,15 +406,27 @@ cards.forEach(card => {
     }
 });
 }
+window.addEventListener("load", () => {
+    setTimeout(balanceMasonry, 100);
+});
 
-window.addEventListener("load", balanceMasonry);
+let resizeTimeout;
+
 window.addEventListener("resize", () => {
-    setTimeout(balanceMasonry, 200);
+    clearTimeout(resizeTimeout);
+
+    resizeTimeout = setTimeout(() => {
+        balanceMasonry();
+    }, 300);
 });
 
-window.addEventListener('resize', () => {
-    location.reload(); // simple solution
-});
+function getColumnCount() {
+    const width = window.innerWidth;
+
+    if (width < 500) return 1;     // 📱 phone → 1 column
+    if (width < 900) return 2;     // 📱 tablet → 2 columns
+    return 4;                      // 💻 desktop → 4 columns
+}
 </script>
 
 {% endblock %}
