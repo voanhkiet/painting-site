@@ -155,6 +155,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // ✅ OPEN MODAL
   window.openModal = function(el) {
+    const modal = document.getElementById("imageModal");
     const modalImg = document.getElementById("modalImg");
 
     const title = document.getElementById("modalTitle");
@@ -163,23 +164,53 @@ document.addEventListener("DOMContentLoaded", function() {
 
     currentIndex = parseInt(el.dataset.index);
 
-    modalImg.src = el.src;
-    title.innerText = el.dataset.title || "";
-    desc.innerText = el.dataset.desc || "";
+    // 🔥 GET POSITION
+    const rect = el.getBoundingClientRect();
 
-    const text = encodeURIComponent(
-    `Xin chào,
+    // 🔥 CLONE IMAGE
+    const clone = el.cloneNode();
+    clone.style.position = "fixed";
+    clone.style.top = rect.top + "px";
+    clone.style.left = rect.left + "px";
+    clone.style.width = rect.width + "px";
+    clone.style.height = rect.height + "px";
+    clone.style.transition = "all 0.4s ease";
+    clone.style.zIndex = "9999";
+    clone.style.borderRadius = "12px";
 
-    Tôi quan tâm đến tranh:
+    document.body.appendChild(clone);
 
-    🎨 ${el.dataset.title}
+    // 🔥 ANIMATE TO CENTER
+    requestAnimationFrame(() => {
+        clone.style.top = "50%";
+        clone.style.left = "50%";
+        clone.style.transform = "translate(-50%, -50%)";
+        clone.style.width = "80vw";
+        clone.style.height = "auto";
+    });
 
-    Bạn có thể tư vấn thêm giúp tôi không?`
-    );
+    // 🔥 AFTER ANIMATION → SHOW MODAL
+    setTimeout(() => {
+        modal.classList.add("show");
+        modalImg.src = el.src;
 
-    zaloBtn.href = `https://zalo.me/84939742254?text=${text}`;
+        title.innerText = el.dataset.title || "";
+        desc.innerText = el.dataset.desc || "";
 
-    modal.classList.add("show");
+        const text = encodeURIComponent(
+`Xin chào,
+
+Tôi quan tâm đến tranh:
+
+🎨 ${el.dataset.title}
+
+Bạn có thể tư vấn thêm giúp tôi không?`
+        );
+
+        zaloBtn.href = `https://zalo.me/84939742254?text=${text}`;
+
+        clone.remove();
+    }, 400);
 };
     // ✅ NEXT
     window.nextImage = function() {
