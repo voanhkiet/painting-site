@@ -385,24 +385,29 @@ for (let i = 0; i < columnCount; i++) {
     gallery.appendChild(col);
 }
 
-// track column heights
-const heights = new Array(columnCount).fill(0);
+
 
 // distribute cards by shortest column
 cards.forEach(card => {
-    const shortestIndex = heights.indexOf(Math.min(...heights));
-
-    columns[shortestIndex].appendChild(card);
-
-    // estimate height (after image loads)
     const img = card.querySelector('img');
 
+    const placeCard = () => {
+        // find shortest column (REAL height)
+        let shortestCol = columns[0];
+
+        columns.forEach(col => {
+            if (col.offsetHeight < shortestCol.offsetHeight) {
+                shortestCol = col;
+            }
+        });
+
+        shortestCol.appendChild(card);
+    };
+
     if (img.complete) {
-        heights[shortestIndex] += img.clientHeight;
+        placeCard();
     } else {
-        img.onload = () => {
-            heights[shortestIndex] += img.clientHeight;
-        };
+        img.onload = placeCard;
     }
 });
 }
