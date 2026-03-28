@@ -101,22 +101,21 @@ body {
 }
 /* GALLERY */
 .gallery {
-    column-count: 4;
-    column-gap: 20px;
-    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
 
     max-width: 1400px;
     margin: 0 auto;
-
-    column-fill: balance;
+    padding: 20px;
 }
 
 .card {
-   break-inside: avoid;
    margin-bottom: 20px;
    display: inline-block;
    width: 100%;
    position: relative;
+   border-radius: 14px;
 
    border-radius: 10px;
    overflow: hidden;
@@ -138,23 +137,6 @@ body {
 
 }
 
-@media (max-width: 1024px) {
-    .gallery{
-        column-count: 3;
-    }
-}
-
-@media (max-width: 768px){
-    .gallery{
-        column-count: 2;
-    }
-}
-
-@media (max-width: 480px) {
-    .gallery {
-        column-count: 1;
-    }
-}
 .card.sold img {
     filter: grayscale(80%) brightness(0.6) contrast(0.9);
 }
@@ -390,7 +372,7 @@ nav a {
 
 /* SOLD badge */
 .sold-badge {
-    display: inline-block;
+   
     margin-bottom: 8px;
     background: rgba(255, 59, 59, 0.75);
     color: white;
