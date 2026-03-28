@@ -107,6 +107,7 @@ body {
     column-count: 4;
     column-gap: 16px;
     column-fill: balance;
+    margin: 0;
 }
 
 /* Tablet */
@@ -701,8 +702,9 @@ nav a {
     .container {
         max-width: 100%;
         width: 100%;
-        margin: 0 auto;
-        padding: 12px;
+
+        margin: 0;
+        padding: 10px;
     }
 }
 @media (max-width: 600px) {
@@ -711,6 +713,7 @@ nav a {
         column-gap: 10px;
         padding: 6px;
         width: 100%;
+        overflow-x: hidden;
     }
 
     .card {
