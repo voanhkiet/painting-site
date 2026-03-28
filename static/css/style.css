@@ -122,8 +122,9 @@ body {
     transition: transform 0.4s ease, filter 0.3s ease;
     filter: contrast(1.05) saturate(1.05);
     box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-    height: 300px;
-    object-fit: cover;
+    height: 250px;
+    object-fit: contain;
+    background: #111;
 }
 .card.sold img {
     filter: grayscale(80%) brightness(0.6) contrast(0.9);
