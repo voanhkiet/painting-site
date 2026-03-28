@@ -371,45 +371,45 @@ function closeInquiry() {
 
 function balanceMasonry() {
     const gallery = document.querySelector('.gallery');
-const cards = Array.from(document.querySelectorAll('.card'));
-// create columns
-const columnCount = getColumnCount();
-const columns = [];
 
-gallery.innerHTML = '';
+    // 🔥 get original cards (not from columns)
+    const cards = Array.from(gallery.querySelectorAll('.card'));
 
-for (let i = 0; i < columnCount; i++) {
-    const col = document.createElement('div');
-    col.className = 'column';
-    columns.push(col);
-    gallery.appendChild(col);
-}
+    const columnCount = getColumnCount();
+    const columns = [];
 
+    gallery.innerHTML = '';
 
-
-// distribute cards by shortest column
-cards.forEach(card => {
-    const img = card.querySelector('img');
-
-    const placeCard = () => {
-        // find shortest column (REAL height)
-        let shortestCol = columns[0];
-
-        columns.forEach(col => {
-            if (col.offsetHeight < shortestCol.offsetHeight) {
-                shortestCol = col;
-            }
-        });
-
-        shortestCol.appendChild(card);
-    };
-
-    if (img.complete) {
-        placeCard();
-    } else {
-        img.onload = placeCard;
+    // create columns
+    for (let i = 0; i < columnCount; i++) {
+        const col = document.createElement('div');
+        col.className = 'column';
+        columns.push(col);
+        gallery.appendChild(col);
     }
-});
+
+    // distribute cards
+    cards.forEach(card => {
+        const img = card.querySelector('img');
+
+        const placeCard = () => {
+            let shortestCol = columns[0];
+
+            columns.forEach(col => {
+                if (col.offsetHeight < shortestCol.offsetHeight) {
+                    shortestCol = col;
+                }
+            });
+
+            shortestCol.appendChild(card);
+        };
+
+        if (img.complete) {
+            placeCard();
+        } else {
+            img.onload = placeCard;
+        }
+    });
 }
 window.addEventListener("load", () => {
     setTimeout(balanceMasonry, 100);
@@ -419,18 +419,16 @@ let resizeTimeout;
 
 window.addEventListener("resize", () => {
     clearTimeout(resizeTimeout);
-
     resizeTimeout = setTimeout(() => {
-        balanceMasonry();
+        balanceMasonry(); // your function
     }, 300);
 });
 
 function getColumnCount() {
-    const width = window.innerWidth;
-
-    if (width < 500) return 1;     // 📱 phone → 1 column
-    if (width < 900) return 2;     // 📱 tablet → 2 columns
-    return 4;                      // 💻 desktop → 4 columns
+    if (window.innerWidth < 600) return 1;   // phone
+    if (window.innerWidth < 900) return 2;   // tablet
+    if (window.innerWidth < 1200) return 3;  // small laptop
+    return 4; // desktop
 }
 </script>
 
