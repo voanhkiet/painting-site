@@ -112,6 +112,26 @@ body {
     padding: 20px;
 }
 
+/* Tablet */
+@media (max-width: 1024px) {
+    .gallery {
+        column-count: 2;
+    }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    .gallery {
+        column-count: 1; /* 🔥 key */
+        padding: 10px;
+        column-gap: 12px;
+    }
+
+    .card {
+        margin-bottom: 12px;
+    }
+}
+
 .card {
    margin-bottom: 20px;
    display: block;
