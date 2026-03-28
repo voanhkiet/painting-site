@@ -103,7 +103,8 @@ body {
 .gallery {
     gap: 20px;
 
-
+    display: flex;
+    gap: 16px;
     
     align-items: start;
     max-width: 1400px;
@@ -111,22 +112,21 @@ body {
     padding: 12px;
 }
 
-/* Tablet */
-@media (max-width: 1024px) {
-    .gallery {
-        padding: 10px;
-    }
+/* columns created by JS */
+.gallery > div {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
-/* Mobile */
 @media (max-width: 600px) {
     .gallery {
-        /* 🔥 key */
-        padding: 10px;
+        flex-direction: row;
     }
 
-    .card {
-        margin-bottom: 12px;
+    .gallery > div {
+        flex: 1;
     }
 }
 
@@ -154,9 +154,9 @@ body {
    width: 100%;
    height: auto;
    display: block;
-    max-height: 70vh;
     border-radius: 10px;
-    object-fit: cover;
+    object-fit: contain;
+    max-height: none;
 
    transition: transform 0.4s ease;
 
