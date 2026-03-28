@@ -179,21 +179,21 @@ nav a {
 .overlay {
     position: absolute;
     bottom: 0;
-    width: 100%;
-    padding: 12px;
+    left: 0;
+    right: 0;
+
+    padding: 8px 10px;
 
     background: linear-gradient(
         to top,
-        rgba(0,0,0,0.65),
-        rgba(0,0,0,0.3),
+        rgba(0,0,0,0.6),
         transparent
     );
 
     color: white;
-    text-align: center;
+    font-size: 14px;
 
-    transition: 0.3s ease;
-    pointer-events: none;
+    backdrop-filter: blur(6px);
 }
 .overlay h3 {
     font-size: 18px;
