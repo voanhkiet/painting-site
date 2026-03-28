@@ -103,9 +103,8 @@ body {
 .gallery {
     gap: 20px;
 
-    column-count: 2;
-    column-gap: 16px;
 
+    
     align-items: start;
     max-width: 1400px;
     margin: 0 auto;
@@ -115,16 +114,15 @@ body {
 /* Tablet */
 @media (max-width: 1024px) {
     .gallery {
-        column-count: 2;
+        padding: 10px;
     }
 }
 
 /* Mobile */
 @media (max-width: 600px) {
     .gallery {
-        column-count: 2; /* 🔥 key */
+        /* 🔥 key */
         padding: 10px;
-        column-gap: 12px;
     }
 
     .card {

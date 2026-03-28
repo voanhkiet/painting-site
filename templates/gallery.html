@@ -7,7 +7,7 @@
 {% else %}
 <h2>Collection</h2>
 {% endif %}
-<div class="gallery">
+<div class="gallery" id="gallery">
 {% for painting in paintings %}
 
 <div class="card {% if painting.is_sold %}sold{% endif %}" 
@@ -368,6 +368,39 @@ function closeInquiry() {
     document.getElementById("inquiryModal").classList.remove("show");
 }
 
+
+function balanceMasonry() {
+    const gallery = document.getElementById("gallery");
+    const cards = Array.from(gallery.children);
+
+    const columns = window.innerWidth < 768 ? 2 : 4;
+
+    gallery.innerHTML = "";
+
+    let columnHeights = new Array(columns).fill(0);
+    let columnWrappers = [];
+
+    for (let i = 0; i < columns; i++) {
+        const col = document.createElement("div");
+        col.style.display = "flex";
+        col.style.flexDirection = "column";
+        col.style.gap = "16px";
+        gallery.appendChild(col);
+        columnWrappers.push(col);
+    }
+
+    cards.forEach(card => {
+        let minIndex = columnHeights.indexOf(Math.min(...columnHeights));
+        columnWrappers[minIndex].appendChild(card);
+
+        columnHeights[minIndex] += card.offsetHeight;
+    });
+}
+
+window.addEventListener("load", balanceMasonry);
+window.addEventListener("resize", () => {
+    setTimeout(balanceMasonry, 200);
+});
 
 </script>
 
