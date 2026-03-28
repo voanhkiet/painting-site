@@ -13,21 +13,25 @@
 <body>
 
 <header class="header">
-    <div class="logo">My Gallery</div>
+    <div class="container header-inner">
+        <div class="logo">My Gallery</div>
 
-    <nav>
-        <a href="/?lang={{ lang }}">Home</a>
-        <a href="/gallery?lang={{ lang }}">Gallery</a>
-        <a href="/contact?lang={{ lang }}">Contact</a>
-    </nav>
+        <nav>
+            <a href="/?lang={{ lang }}">Home</a>
+            <a href="/gallery?lang={{ lang }}">Gallery</a>
+            <a href="/contact?lang={{ lang }}">Contact</a>
+        </nav>
 
-    <div class="lang">
-        <a href="?lang=en">EN</a> |
-        <a href="?lang=vi">VI</a>
+        <div class="lang">
+            <a href="?lang=en">EN</a> |
+            <a href="?lang=vi">VI</a>
+        </div>
     </div>
 </header>
-
-{% block content %}{% endblock %}
+<div class="container">
+    
+    {% block content %}{% endblock %}
+</div>
 
 <!-- Zalo button -->
 <a href="https://zalo.me/+84939742254" target="_blank" class="zalo-button">

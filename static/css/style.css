@@ -110,6 +110,7 @@ body {
     max-width: 1400px;
     margin: 0 auto;
     padding: 12px;
+    width: 100%;
 }
 
 /* columns created by JS */
@@ -122,11 +123,11 @@ body {
 
 @media (max-width: 600px) {
     .gallery {
-        flex-direction: row;
+        padding: 8px;
     }
 
-    .gallery > div {
-        flex: 1;
+    .card {
+        border-radius: 10px;
     }
 }
 
@@ -702,4 +703,24 @@ nav a {
     display: flex;
     flex-direction: column;
     gap: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 16px;
+}
+
+/* 📱 Mobile fix */
+@media (max-width: 768px) {
+    .container {
+        max-width: 100%;
+        padding: 10px;
+    }
+}
+.header-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
