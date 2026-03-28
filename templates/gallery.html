@@ -370,31 +370,42 @@ function closeInquiry() {
 
 
 function balanceMasonry() {
-    const gallery = document.getElementById("gallery");
-    const cards = Array.from(gallery.children);
+    const gallery = document.querySelector('.gallery');
+const cards = Array.from(gallery.children);
 
-    const columns = window.innerWidth < 768 ? 2 : 4;
+// create columns
+const columnCount = window.innerWidth < 768 ? 2 : 4;
+const columns = [];
 
-    gallery.innerHTML = "";
+gallery.innerHTML = '';
 
-    let columnHeights = new Array(columns).fill(0);
-    let columnWrappers = [];
+for (let i = 0; i < columnCount; i++) {
+    const col = document.createElement('div');
+    col.className = 'column';
+    columns.push(col);
+    gallery.appendChild(col);
+}
 
-    for (let i = 0; i < columns; i++) {
-        const col = document.createElement("div");
-        col.style.display = "flex";
-        col.style.flexDirection = "column";
-        col.style.gap = "16px";
-        gallery.appendChild(col);
-        columnWrappers.push(col);
+// track column heights
+const heights = new Array(columnCount).fill(0);
+
+// distribute cards by shortest column
+cards.forEach(card => {
+    const shortestIndex = heights.indexOf(Math.min(...heights));
+
+    columns[shortestIndex].appendChild(card);
+
+    // estimate height (after image loads)
+    const img = card.querySelector('img');
+
+    if (img.complete) {
+        heights[shortestIndex] += img.clientHeight;
+    } else {
+        img.onload = () => {
+            heights[shortestIndex] += img.clientHeight;
+        };
     }
-
-    cards.forEach(card => {
-        let minIndex = columnHeights.indexOf(Math.min(...columnHeights));
-        columnWrappers[minIndex].appendChild(card);
-
-        columnHeights[minIndex] += card.offsetHeight;
-    });
+});
 }
 
 window.addEventListener("load", balanceMasonry);
@@ -402,6 +413,9 @@ window.addEventListener("resize", () => {
     setTimeout(balanceMasonry, 200);
 });
 
+window.addEventListener('resize', () => {
+    location.reload(); // simple solution
+});
 </script>
 
 {% endblock %}
