@@ -142,7 +142,8 @@ def admin():
         
         return redirect(url_for("gallery"))
     
-    return render_template("admin.html")
+    paintings = Painting.query.order_by(Painting.id.desc()).all()
+    return render_template("admin.html", paintings=paintings)
 
 @app.route("/admin/inquiries")
 @admin_required
@@ -193,6 +194,13 @@ def logout():
     session.pop("admin", None)
     return redirect(url_for("login"))
 
+@app.route("/admin/delete/<int:id>", methods=["POST"])
+@admin_required
+def delete_painting(id):
+    painting = Painting.query.get_or_404(id)
+    db.session.delete(painting)
+    db.session.commit()
+    return redirect(url_for("admin"))
 
 def send_email(name, phone, message, painting, email):
     sender = os.environ.get("EMAIL_USER")
@@ -249,6 +257,7 @@ Art Gallery
         server.starttls()
         server.login(sender, password)
         server.send_message(msg)
+
 
 
 # Create DB automatically

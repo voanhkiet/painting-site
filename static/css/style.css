@@ -180,7 +180,8 @@ body {
 
 
 .card:hover {
-    transform: translateY(-4px);
+    transform: translateY(-4px) scale(1.02);
+    transition: 0.2s ease;
     box-shadow: 0 14px 40px rgba(0,0,0,0.15);
 }
 
@@ -263,22 +264,48 @@ nav a {
 .admin-form {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 10px;
     max-width: 500px;
-    margin: 40px auto;
 }
 
 .admin-form input,
 .admin-form textarea {
     padding: 10px;
-    font-size: 14px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
 }
 
 .admin-form button {
     padding: 12px;
     background: black;
     color: white;
+    border-radius: 8px;
     border: none;
+    cursor: pointer;
+}
+
+.info {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 6px;
+}
+
+.sold-badge {
+    color: red;
+    font-weight: bold;
+}
+
+.available-badge {
+    color: green;
+}
+
+.delete-btn {
+    margin-top: 8px;
+    background: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 6px;
+    border-radius: 6px;
     cursor: pointer;
 }
 .modal-content {
