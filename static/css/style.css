@@ -140,12 +140,22 @@ body {
     width: 100%;
     margin-bottom: 16px;
     break-inside: avoid;
+    opacity: 0;
 
     border-radius: 12px;
     overflow: hidden;
 
     background: #fff;
     box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    transform: translateY(10px);
+    animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 .card img {

@@ -15,8 +15,9 @@
          onclick="openModal(this.querySelector('img'))">
 
         <img 
-            src="{{ painting.image.replace('/upload/', '/upload/w_800,h_800,c_fit,f_auto,q_auto/')}}"
+            src="{{ painting.image.replace('/upload/', '/upload/w_800,c_limit,f_auto,q_auto/')}}"
             loading="lazy"
+            decoding="async"
             data-index="{{ loop.index0 }}"
             data-title="{% if lang == 'vi' %}{{ painting.title_vi }}{% else %}{{ painting.title_en }}{% endif %}"
             data-desc="{% if lang == 'vi' %}{{ painting.description_vi }}{% else %}{{ painting.description_en }}{% endif %}"
@@ -114,6 +115,7 @@ let startY = 0;
 document.addEventListener("DOMContentLoaded", function() {
 
     const modal = document.getElementById("imageModal");
+    if (!modal) return;
      // 👇 ADD SWIPE HERE
    
   modal.addEventListener("touchstart", function(e) {
@@ -230,6 +232,23 @@ document.querySelectorAll(".close").forEach(btn => {
     btn.onclick = function() {
         document.querySelectorAll(".modal").forEach(m => m.classList.remove("show"));
     };
+});
+
+window.addEventListener('load', () => {
+    const container = document.querySelector('#all-cards');
+
+    imagesLoaded(container, () => {
+        balanceMasonry();
+    });
+});
+
+let resizeTimer;
+
+window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+        balanceMasonry();
+    }, 200);
 });
 
     // ✅ CLICK OUTSIDE
@@ -365,6 +384,24 @@ function closeInquiry() {
     document.getElementById("inquiryModal").classList.remove("show");
 }
 
+function imagesLoaded(container, callback) {
+    const images = container.querySelectorAll('img');
+    let loaded = 0;
+
+    if (images.length === 0) return callback();
+
+    images.forEach(img => {
+        if (img.complete) {
+            loaded++;
+            if (loaded === images.length) callback();
+        } else {
+            img.onload = () => {
+                loaded++;
+                if (loaded === images.length) callback();
+            };
+        }
+    });
+}
 
 function balanceMasonry() {
     const gallery = document.querySelector('#gallery');
@@ -379,7 +416,6 @@ function balanceMasonry() {
     const columns = [];
     const heights = [];
 
-    // create columns
     for (let i = 0; i < columnCount; i++) {
         const col = document.createElement('div');
         col.className = 'column';
@@ -389,18 +425,15 @@ function balanceMasonry() {
     }
 
     cards.forEach(card => {
-        // find shortest column
         let minIndex = heights.indexOf(Math.min(...heights));
-
         columns[minIndex].appendChild(card);
 
-        // update height AFTER render
-        heights[minIndex] += card.offsetHeight;
+        // IMPORTANT: use scrollHeight AFTER append
+        heights[minIndex] = columns[minIndex].scrollHeight;
     });
 }
 
-window.addEventListener('load', balanceMasonry);
-window.addEventListener('resize', balanceMasonry);
+
 
 function getColumnCount() {
     if (window.innerWidth < 500) return 1;   // phone
