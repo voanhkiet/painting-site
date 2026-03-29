@@ -7,60 +7,54 @@
 {% else %}
 <h2>Collection</h2>
 {% endif %}
-<div class="gallery" id="gallery">
-{% for painting in paintings %}
+<!-- 🔥 hidden original cards -->
+<div id="all-cards" style="display: none;">
+    {% for painting in paintings %}
+        <div class="card {% if painting.is_sold %}sold{% endif %}" 
+             onclick="openModal(this.querySelector('img'))">
 
-<div class="card {% if painting.is_sold %}sold{% endif %}" 
-     onclick="openModal(this.querySelector('img'))">
+            <img 
+                src="{{ painting.image.replace('/upload/', '/upload/w_800,h_800,c_fit,f_auto,q_auto/')}}"
+                loading="lazy"
+                data-index="{{ loop.index0 }}"
+                data-title="{% if lang == 'vi' %}{{ painting.title_vi }}{% else %}{{ painting.title_en }}{% endif %}"
+                data-desc="{% if lang == 'vi' %}{{ painting.description_vi }}{% else %}{{ painting.description_en }}{% endif %}"
+            >
 
-    <img 
-        src="{{ painting.image.replace('/upload/', '/upload/w_800,h_800,c_fit,f_auto,q_auto/')}}"
-        style="width:100%; height:auto;"
-        loading="lazy"
-        data-index="{{ loop.index0 }}"
-        data-title="{% if lang == 'vi' %}{{ painting.title_vi }}{% else %}{{ painting.title_en }}{% endif %}"
-        data-desc="{% if lang == 'vi' %}{{ painting.description_vi }}{% else %}{{ painting.description_en }}{% endif %}"
-    >
+            <div class="overlay">
+                <h3>
+                    {% if lang == "vi" %}
+                        {{ painting.title_vi }}
+                    {% else %}
+                        {{ painting.title_en }}
+                    {% endif %}
+                </h3>
 
-    <div class="overlay">
+                <p>
+                    {% if lang == "vi" %}
+                        {{ painting.description_vi }}
+                    {% else %}
+                        {{ painting.description_en }}
+                    {% endif %}
+                </p>
 
-    <!-- TITLE -->
-    <h3>
-        {% if lang == "vi" %}
-            {{ painting.title_vi }}
-        {% else %}
-            {{ painting.title_en }}
-        {% endif %}
-    </h3>
-
-    <!-- DESCRIPTION -->
-    <p>
-        {% if lang == "vi" %}
-            {{ painting.description_vi }}
-        {% else %}
-            {{ painting.description_en }}
-        {% endif %}
-    </p>
-
-    {% if painting.is_sold %}
-        <div class="sold-badge">
-            {% if lang == "vi" %}Đã bán{% else %}SOLD{% endif %}
+                {% if painting.is_sold %}
+                    <div class="sold-badge">
+                        {% if lang == "vi" %}Đã bán{% else %}SOLD{% endif %}
+                    </div>
+                {% else %}
+                    <div class="actions">
+                        <a href="tel:+84939742254" class="btn-action">Call</a>
+                        <a href="https://zalo.me/84939742254" class="btn-action">Zalo</a>
+                    </div>
+                {% endif %}
+            </div>
         </div>
-    {% else %}
-        <div class="actions">
-            <a href="tel:+84939742254" class="btn-action">
-                {% if lang == "vi" %}Gọi{% else %}Call{% endif %}
-            </a>
-            <a href="https://zalo.me/84939742254" class="btn-action">Zalo</a>
-        </div>
-    {% endif %}
-
+    {% endfor %}
 </div>
 
-</div>
-
-{% endfor %}
-</div>
+<!-- 🔥 visible gallery (empty, JS will fill it) -->
+<div class="gallery" id="gallery"></div>
 
 <!-- ✅ ADD MODAL HERE -->
 <div id="imageModal" class="modal">
@@ -373,8 +367,7 @@ function balanceMasonry() {
     const gallery = document.querySelector('.gallery');
 
     // 🔥 get original cards (not from columns)
-    const cards = Array.from(gallery.querySelectorAll('.card'));
-
+    const cards = Array.from(document.querySelectorAll('#all-cards .card'));
     const columnCount = getColumnCount();
     const columns = [];
 

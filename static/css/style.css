@@ -104,10 +104,15 @@ body {
 }
 /* GALLERY */
 .gallery {
-    column-count: 4;
-    column-gap: 16px;
-    column-fill: balance;
-    margin: 0;
+    display: flex;
+    gap: 16px
+}
+
+.column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
 /* Tablet */
@@ -120,8 +125,10 @@ body {
 /* Mobile */
 @media (max-width: 600px) {
     .gallery {
-        column-count: 2;
-        column-gap: 10px;
+        gap: 10px;
+    }
+    .column {
+        gap: 10px;
     }
 }
 
