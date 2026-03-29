@@ -8,7 +8,7 @@
 <h2>Collection</h2>
 {% endif %}
 <!-- 🔥 hidden original cards -->
-<div id="all-cards" style="display: none;">
+<div id="all-cards">
     {% for painting in paintings %}
     
     <div class="card {% if painting.is_sold %}sold{% endif %}" 
