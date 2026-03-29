@@ -367,62 +367,40 @@ function closeInquiry() {
 
 
 function balanceMasonry() {
-    const gallery = document.querySelector('.gallery');
+    const gallery = document.querySelector('#gallery');
     const cards = Array.from(document.querySelectorAll('#all-cards .card'));
+
+    if (!gallery || cards.length === 0) return;
+
     const columnCount = getColumnCount();
 
     gallery.innerHTML = '';
 
     const columns = [];
-    const heights = new Array(columnCount).fill(0);
+    const heights = [];
 
     // create columns
     for (let i = 0; i < columnCount; i++) {
         const col = document.createElement('div');
         col.className = 'column';
         columns.push(col);
+        heights.push(0);
         gallery.appendChild(col);
     }
 
     cards.forEach(card => {
-        const img = card.querySelector('img');
+        // find shortest column
+        let minIndex = heights.indexOf(Math.min(...heights));
 
-        const placeCard = () => {
-            // find shortest column
-            let minIndex = 0;
+        columns[minIndex].appendChild(card);
 
-            for (let i = 1; i < heights.length; i++) {
-                if (heights[i] < heights[minIndex]) {
-                    minIndex = i;
-                }
-            }
-
-            columns[minIndex].appendChild(card);
-
-            // update height
-            heights[minIndex] += card.offsetHeight;
-        };
-
-        if (img.complete) {
-            placeCard();
-        } else {
-            img.onload = placeCard;
-            img.onerror = placeCard;
-        }
+        // update height AFTER render
+        heights[minIndex] += card.offsetHeight;
     });
 }
-window.addEventListener("load", () => {
-    setTimeout(balanceMasonry, 100);
-});
 
-let resizeTimeout;
-
-window.addEventListener("resize", () => {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(() => {
-        balanceMasonry(); // your function
-    }, 300);
-});
+window.addEventListener('load', balanceMasonry);
+window.addEventListener('resize', balanceMasonry);
 
 function getColumnCount() {
     if (window.innerWidth < 500) return 1;   // phone
