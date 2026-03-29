@@ -108,6 +108,7 @@ body {
     gap: 10px;
     align-items: flex-start;
     width: 100%;
+    padding: 0 6px;
 }
 
 .column {
@@ -762,4 +763,7 @@ nav a {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+#all-cards {
+    display: none;
 }
