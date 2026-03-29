@@ -14,14 +14,40 @@
 
     <input type="file" name="image" required>
 
-    <!-- ✅ ADD HERE -->
     <label class="sold-check">
         <input type="checkbox" name="is_sold">
         Mark as SOLD
     </label>
     
     <button type="submit">Upload</button>
-
 </form>
+
+<hr>
+
+<h3>All Paintings</h3>
+
+<div class="gallery">
+    {% for p in paintings %}
+        <div class="card">
+
+            <img src="{{ p.image }}" alt="">
+
+            <div class="info">
+                <strong>{{ p.title_en }}</strong>
+
+                {% if p.is_sold %}
+                    <span class="sold-badge">SOLD</span>
+                {% else %}
+                    <span class="available-badge">Available</span>
+                {% endif %}
+            </div>
+
+            <form method="POST" action="/admin/delete/{{ p.id }}">
+                <button class="delete-btn">Delete</button>
+            </form>
+
+        </div>
+    {% endfor %}
+</div>
 
 {% endblock %}
