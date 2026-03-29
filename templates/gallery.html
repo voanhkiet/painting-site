@@ -8,47 +8,51 @@
 <h2>Collection</h2>
 {% endif %}
 <!-- 🔥 hidden original cards -->
-<div id="all-cards" style="visibility: hidden; position: absolute; top: -9999px;">    {% for painting in paintings %}
-        <div class="card {% if painting.is_sold %}sold{% endif %}" 
-             onclick="openModal(this.querySelector('img'))">
+<div id="all-cards" style="display: none;">
+    {% for painting in paintings %}
+    
+    <div class="card {% if painting.is_sold %}sold{% endif %}" 
+         onclick="openModal(this.querySelector('img'))">
 
-            <img 
-                src="{{ painting.image.replace('/upload/', '/upload/w_800,h_800,c_fit,f_auto,q_auto/')}}"
-                loading="lazy"
-                data-index="{{ loop.index0 }}"
-                data-title="{% if lang == 'vi' %}{{ painting.title_vi }}{% else %}{{ painting.title_en }}{% endif %}"
-                data-desc="{% if lang == 'vi' %}{{ painting.description_vi }}{% else %}{{ painting.description_en }}{% endif %}"
-            >
+        <img 
+            src="{{ painting.image.replace('/upload/', '/upload/w_800,h_800,c_fit,f_auto,q_auto/')}}"
+            loading="lazy"
+            data-index="{{ loop.index0 }}"
+            data-title="{% if lang == 'vi' %}{{ painting.title_vi }}{% else %}{{ painting.title_en }}{% endif %}"
+            data-desc="{% if lang == 'vi' %}{{ painting.description_vi }}{% else %}{{ painting.description_en }}{% endif %}"
+        >
 
-            <div class="overlay">
-                <h3>
-                    {% if lang == "vi" %}
-                        {{ painting.title_vi }}
-                    {% else %}
-                        {{ painting.title_en }}
-                    {% endif %}
-                </h3>
-
-                <p>
-                    {% if lang == "vi" %}
-                        {{ painting.description_vi }}
-                    {% else %}
-                        {{ painting.description_en }}
-                    {% endif %}
-                </p>
-
-                {% if painting.is_sold %}
-                    <div class="sold-badge">
-                        {% if lang == "vi" %}Đã bán{% else %}SOLD{% endif %}
-                    </div>
+        <div class="overlay">
+            <h3>
+                {% if lang == "vi" %}
+                    {{ painting.title_vi }}
                 {% else %}
-                    <div class="actions">
-                        <a href="tel:+84939742254" class="btn-action">Call</a>
-                        <a href="https://zalo.me/84939742254" class="btn-action">Zalo</a>
-                    </div>
+                    {{ painting.title_en }}
                 {% endif %}
-            </div>
+            </h3>
+
+            <p>
+                {% if lang == "vi" %}
+                    {{ painting.description_vi }}
+                {% else %}
+                    {{ painting.description_en }}
+                {% endif %}
+            </p>
+
+            {% if painting.is_sold %}
+                <div class="sold-badge">
+                    {% if lang == "vi" %}Đã bán{% else %}SOLD{% endif %}
+                </div>
+            {% else %}
+                <div class="actions">
+                    <a href="tel:+84939742254" class="btn-action">Call</a>
+                    <a href="https://zalo.me/84939742254" class="btn-action">Zalo</a>
+                </div>
+            {% endif %}
         </div>
+
+    </div>
+
     {% endfor %}
 </div>
 
@@ -364,13 +368,13 @@ function closeInquiry() {
 
 function balanceMasonry() {
     const gallery = document.querySelector('.gallery');
-
-    // 🔥 get original cards (not from columns)
     const cards = Array.from(document.querySelectorAll('#all-cards .card'));
     const columnCount = getColumnCount();
-    const columns = [];
 
     gallery.innerHTML = '';
+
+    const columns = [];
+    const heights = new Array(columnCount).fill(0);
 
     // create columns
     for (let i = 0; i < columnCount; i++) {
@@ -380,47 +384,30 @@ function balanceMasonry() {
         gallery.appendChild(col);
     }
 
-    // distribute cards
     cards.forEach(card => {
         const img = card.querySelector('img');
 
         const placeCard = () => {
-            const heights = new Array(columnCount).fill(0);
+            // find shortest column
+            let minIndex = 0;
 
-cards.forEach(card => {
-    const img = card.querySelector('img');
-
-    const placeCard = () => {
-        // 🔥 find shortest column by JS (NOT DOM)
-        let minIndex = 0;
-
-        for (let i = 1; i < heights.length; i++) {
-            if (heights[i] < heights[minIndex]) {
-                minIndex = i;
+            for (let i = 1; i < heights.length; i++) {
+                if (heights[i] < heights[minIndex]) {
+                    minIndex = i;
+                }
             }
-        }
 
-        columns[minIndex].appendChild(card);
+            columns[minIndex].appendChild(card);
 
-        // 🔥 update height manually
-        heights[minIndex] += card.offsetHeight;
-    };
-
-    if (img.complete) {
-        placeCard();
-    } else {
-        img.onload = placeCard;
-        img.onerror = placeCard;
-    }
-});
-
-            shortestCol.appendChild(card);
+            // update height
+            heights[minIndex] += card.offsetHeight;
         };
 
         if (img.complete) {
             placeCard();
         } else {
             img.onload = placeCard;
+            img.onerror = placeCard;
         }
     });
 }
