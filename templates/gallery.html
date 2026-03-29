@@ -8,8 +8,7 @@
 <h2>Collection</h2>
 {% endif %}
 <!-- 🔥 hidden original cards -->
-<div id="all-cards" style="display: none;">
-    {% for painting in paintings %}
+<div id="all-cards" style="visibility: hidden; position: absolute; top: -9999px;">    {% for painting in paintings %}
         <div class="card {% if painting.is_sold %}sold{% endif %}" 
              onclick="openModal(this.querySelector('img'))">
 
@@ -386,13 +385,34 @@ function balanceMasonry() {
         const img = card.querySelector('img');
 
         const placeCard = () => {
-            let shortestCol = columns[0];
+            const heights = new Array(columnCount).fill(0);
 
-            columns.forEach(col => {
-                if (col.offsetHeight < shortestCol.offsetHeight) {
-                    shortestCol = col;
-                }
-            });
+cards.forEach(card => {
+    const img = card.querySelector('img');
+
+    const placeCard = () => {
+        // 🔥 find shortest column by JS (NOT DOM)
+        let minIndex = 0;
+
+        for (let i = 1; i < heights.length; i++) {
+            if (heights[i] < heights[minIndex]) {
+                minIndex = i;
+            }
+        }
+
+        columns[minIndex].appendChild(card);
+
+        // 🔥 update height manually
+        heights[minIndex] += card.offsetHeight;
+    };
+
+    if (img.complete) {
+        placeCard();
+    } else {
+        img.onload = placeCard;
+        img.onerror = placeCard;
+    }
+});
 
             shortestCol.appendChild(card);
         };

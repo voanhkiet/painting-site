@@ -105,7 +105,8 @@ body {
 /* GALLERY */
 .gallery {
     display: flex;
-    gap: 16px
+    gap: 16px;
+    align-items: flex-start;
 }
 
 .column {
@@ -716,8 +717,6 @@ nav a {
 }
 @media (max-width: 600px) {
     .gallery {
-        column-count: 2;
-        column-gap: 10px;
         padding: 6px;
         width: 100%;
         overflow-x: hidden;
