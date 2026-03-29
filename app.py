@@ -44,6 +44,23 @@ def admin_required(f):
     return wrapper
 
 
+@app.before_request
+def force_https_and_www():
+    url = request.url
+
+    if "http://" in url:
+        url = url.replace("http://", "https://", 1)
+
+    if "hoasihoanganh.com" in url and "www" not in url:
+        url = url.replace("hoasihoanganh.com", "www.hoasihoanganh.com")
+
+    if url != request.url:
+        return redirect(url, code=301)
+
+@app.after_request
+def add_header(response):
+    response.headers["Cache-Control"] = "public, max-age=31536000"
+    return response
 
 @app.route("/inquiry", methods=["POST"])
 def submit_inquiry():
@@ -126,7 +143,9 @@ def admin():
 
         if file:
             upload_result = cloudinary.uploader.upload(file)
-            image_url = upload_result["secure_url"]
+            image_url = upload_result["secure_url"].replace(
+    "/upload/", "/upload/w_800,q_auto,f_auto/"
+)
             is_sold = "is_sold" in request.form
             painting = Painting(
                 title_en=title_en,
