@@ -42,9 +42,14 @@
                 {% endif %}
             </div>
 
-            <form method="POST" action="/admin/delete/{{ p.id }}">
-                <button class="delete-btn">Delete</button>
-            </form>
+            <!-- ✅ ACTIONS -->
+            <div class="admin-actions">
+                <a href="/admin/edit/{{ p.id }}" class="edit-btn">Edit</a>
+
+                <form method="POST" action="/admin/delete/{{ p.id }}">
+                    <button class="delete-btn">Delete</button>
+                </form>
+             </div>
 
         </div>
     {% endfor %}
