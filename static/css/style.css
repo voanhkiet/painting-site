@@ -783,3 +783,31 @@ nav a {
 .edit-btn:hover {
     background: #2980b9;
 }
+
+.edit-mode input,
+.edit-mode textarea {
+    width: 100%;
+    margin: 6px 0;
+    padding: 6px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+}
+
+.edit-actions {
+    display: flex;
+    gap: 6px;
+}
+
+.save-btn {
+    background: #2ecc71;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+}
+
+.cancel-btn {
+    background: #aaa;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+}

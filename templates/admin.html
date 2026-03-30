@@ -28,31 +28,93 @@
 
 <div class="gallery">
     {% for p in paintings %}
-        <div class="card">
+        <div class="card" data-id="{{ p.id }}">
 
-            <img src="{{ p.image }}" alt="">
+    <img src="{{ p.image }}" alt="">
 
-            <div class="info">
-                <strong>{{ p.title_en }}</strong>
+    <!-- VIEW MODE -->
+    <div class="view-mode">
+        <strong class="title">{{ p.title_en }}</strong>
 
-                {% if p.is_sold %}
-                    <span class="sold-badge">SOLD</span>
-                {% else %}
-                    <span class="available-badge">Available</span>
-                {% endif %}
-            </div>
+        {% if p.is_sold %}
+            <span class="sold-badge">SOLD</span>
+        {% else %}
+            <span class="available-badge">Available</span>
+        {% endif %}
 
-            <!-- ✅ ACTIONS -->
-            <div class="admin-actions">
-                <a href="/admin/edit/{{ p.id }}" class="edit-btn">Edit</a>
+        <div class="admin-actions">
+            <button class="edit-btn">Edit</button>
 
-                <form method="POST" action="/admin/delete/{{ p.id }}">
-                    <button class="delete-btn">Delete</button>
-                </form>
-             </div>
-
+            <form method="POST" action="/admin/delete/{{ p.id }}">
+                <button class="delete-btn">Delete</button>
+            </form>
         </div>
+    </div>
+
+    <!-- EDIT MODE -->
+    <div class="edit-mode" style="display:none;">
+        <input class="edit-title-en" value="{{ p.title_en }}">
+        <input class="edit-title-vi" value="{{ p.title_vi }}">
+
+        <textarea class="edit-desc-en">{{ p.description_en }}</textarea>
+        <textarea class="edit-desc-vi">{{ p.description_vi }}</textarea>
+
+        <label>
+            <input type="checkbox" class="edit-sold" {% if p.is_sold %}checked{% endif %}>
+            SOLD
+        </label>
+
+        <div class="edit-actions">
+            <button class="save-btn">Save</button>
+            <button class="cancel-btn">Cancel</button>
+        </div>
+    </div>
+
+</div>
     {% endfor %}
 </div>
+<script>
+document.addEventListener("click", function(e) {
 
+    // 👉 ENTER EDIT MODE
+    if (e.target.classList.contains("edit-btn")) {
+        const card = e.target.closest(".card");
+        card.querySelector(".view-mode").style.display = "none";
+        card.querySelector(".edit-mode").style.display = "block";
+    }
+
+    // 👉 CANCEL
+    if (e.target.classList.contains("cancel-btn")) {
+        const card = e.target.closest(".card");
+        card.querySelector(".view-mode").style.display = "block";
+        card.querySelector(".edit-mode").style.display = "none";
+    }
+
+    // 👉 SAVE
+    if (e.target.classList.contains("save-btn")) {
+        const card = e.target.closest(".card");
+        const id = card.dataset.id;
+
+        const data = {
+            title_en: card.querySelector(".edit-title-en").value,
+            title_vi: card.querySelector(".edit-title-vi").value,
+            description_en: card.querySelector(".edit-desc-en").value,
+            description_vi: card.querySelector(".edit-desc-vi").value,
+            is_sold: card.querySelector(".edit-sold").checked
+        };
+
+        fetch(`/admin/update/${id}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+        .then(() => {
+            location.reload(); // simple refresh
+        });
+    }
+
+});
+</script>
 {% endblock %}

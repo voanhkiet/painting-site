@@ -233,6 +233,22 @@ def edit_painting(id):
 
     return render_template("edit.html", painting=painting)
 
+@app.route("/admin/update/<int:id>", methods=["POST"])
+@admin_required
+def update_painting(id):
+    painting = Painting.query.get_or_404(id)
+    data = request.json
+
+    painting.title_en = data["title_en"]
+    painting.title_vi = data["title_vi"]
+    painting.description_en = data["description_en"]
+    painting.description_vi = data["description_vi"]
+    painting.is_sold = data["is_sold"]
+
+    db.session.commit()
+
+    return jsonify({"status": "ok"})
+
 @app.route("/logout")
 def logout():
     session.pop("admin", None)
