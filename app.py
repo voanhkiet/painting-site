@@ -114,7 +114,7 @@ def home():
 
 @app.route("/gallery")
 def gallery():
-    paintings = Painting.query.all()
+    paintings = Painting.query.order_by(Painting.id.desc()).all()
     return render_template("gallery.html", paintings=paintings)
 
 
@@ -159,7 +159,7 @@ def admin():
             db.session.add(painting)
             db.session.commit()
         
-        return redirect(url_for("gallery"))
+        return redirect(url_for("admin"))
     
     paintings = Painting.query.order_by(Painting.id.desc()).all()
     return render_template("admin.html", paintings=paintings)
@@ -201,12 +201,37 @@ def login():
 
         if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
             session["admin"] = True
-            return redirect(url_for("admin_inquiries"))
+            return redirect(url_for("admin"))
         else:
             return "Invalid credentials"
 
     return render_template("login.html")
 
+@app.route("/admin/edit/<int:id>", methods=["GET", "POST"])
+@admin_required
+def edit_painting(id):
+    painting = Painting.query.get_or_404(id)
+
+    if request.method == "POST":
+        painting.title_en = request.form["title_en"]
+        painting.title_vi = request.form["title_vi"]
+        painting.description_en = request.form["description_en"]
+        painting.description_vi = request.form["description_vi"]
+
+        painting.is_sold = "is_sold" in request.form
+
+        file = request.files.get("image")
+
+        if file and file.filename:
+            result = cloudinary.uploader.upload(file)
+            painting.image = result["secure_url"].replace(
+                "/upload/", "/upload/w_800,q_auto,f_auto/"
+            )
+
+        db.session.commit()
+        return redirect("/admin")
+
+    return render_template("edit.html", painting=painting)
 
 @app.route("/logout")
 def logout():

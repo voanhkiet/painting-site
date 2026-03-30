@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Edit Painting</h2>
+
+<form method="POST" enctype="multipart/form-data" class="admin-form">
+
+    <input type="text" name="title_en" value="{{ painting.title_en }}" required>
+    <input type="text" name="title_vi" value="{{ painting.title_vi }}" required>
+
+    <textarea name="description_en">{{ painting.description_en }}</textarea>
+    <textarea name="description_vi">{{ painting.description_vi }}</textarea>
+
+    <p>Current image:</p>
+    <img src="{{ painting.image }}" style="width:150px; margin-bottom:10px;">
+
+    <input type="file" name="image">
+
+    <label class="sold-check">
+        <input type="checkbox" name="is_sold" {% if painting.is_sold %}checked{% endif %}>
+        Mark as SOLD
+    </label>
+
+    <button type="submit">Update</button>
+
+</form>
+
+{% endblock %}

@@ -764,3 +764,22 @@ nav a {
     justify-content: space-between;
     align-items: center;
 }
+
+.admin-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.edit-btn {
+    background: #3498db;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.edit-btn:hover {
+    background: #2980b9;
+}
