@@ -59,7 +59,11 @@ def force_https_and_www():
 
 @app.after_request
 def add_header(response):
-    response.headers["Cache-Control"] = "public, max-age=31536000"
+    # Cache ONLY static files (images, css)
+    if request.path.startswith("/static"):
+        response.headers["Cache-Control"] = "public, max-age=31536000"
+    else:
+        response.headers["Cache-Control"] = "no-store"
     return response
 
 @app.route("/inquiry", methods=["POST"])
