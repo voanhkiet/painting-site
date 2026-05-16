@@ -10,6 +10,9 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 from flask_migrate import Migrate
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 
@@ -29,9 +32,11 @@ cloudinary.config(
 )
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
-app.secret_key = os.environ.get("SECRET_KEY", "fallback-key")
-ADMIN_USERNAME = "admin"
-ADMIN_PASSWORD = "123456"
+
+app.secret_key = os.environ.get("SECRET_KEY")
+
+ADMIN_USERNAME = os.environ.get("ADMIN_USERNAME")
+ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD")
 db.init_app(app)
 migrate = Migrate(app, db)
 
